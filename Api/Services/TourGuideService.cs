@@ -7,6 +7,7 @@ using TourGuide.Services.Interfaces;
 using TourGuide.Users;
 using TourGuide.Utilities;
 using TripPricer;
+using GpsUtil.Location;
 
 namespace TourGuide.Services;
 
@@ -92,16 +93,13 @@ public class TourGuideService : ITourGuideService
 
     public List<Attraction> GetNearByAttractions(VisitedLocation visitedLocation)
     {
-        List<Attraction> nearbyAttractions = new ();
-        foreach (var attraction in _gpsUtil.GetAttractions())
-        {
-            if (_rewardsService.IsWithinAttractionProximity(attraction, visitedLocation.Location))
-            {
-                nearbyAttractions.Add(attraction);
-            }
-        }
-
-        return nearbyAttractions;
+        return _gpsUtil.GetAttractions()
+            .OrderBy(a => _rewardsService.GetDistance(
+                visitedLocation.Location,
+                new Locations(a.Latitude, a.Longitude)
+            ))
+            .Take(5)
+            .ToList();
     }
 
     private void AddShutDownHook()
@@ -152,5 +150,22 @@ public class TourGuideService : ITourGuideService
     private DateTime GetRandomTime()
     {
         return DateTime.UtcNow.AddDays(-new Random().Next(30));
+    }
+
+    public double GetDistance(Locations loc1, Locations loc2)
+    {
+        return _rewardsService.GetDistance(loc1, loc2);
+    }
+
+    public int GetAttractionRewardPoints(Guid attractionId, Guid userId)
+    {
+        var user = _internalUserMap.Values.FirstOrDefault(u => u.UserId == userId);
+        if (user == null)
+            return 0;
+
+        var reward = user.UserRewards
+            .FirstOrDefault(r => r.Attraction.AttractionId == attractionId);
+
+        return reward?.RewardPoints ?? 0;
     }
 }
