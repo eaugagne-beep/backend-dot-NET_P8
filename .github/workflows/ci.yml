@@ -28,7 +28,7 @@ jobs:
       - name: Run Tests (without performance)
         run: dotnet test --configuration Release --no-build --filter Category!=Performance
 
-      - name: Publish API
+      - name: TourGuide
         run: dotnet publish TourGuide/TourGuide.csproj -c Release -o publish
 
       - name: Upload Artifact
