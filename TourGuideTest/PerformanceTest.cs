@@ -44,6 +44,7 @@ namespace TourGuideTest
             _output = output;
         }
 
+        
         [Fact]
         public async Task HighVolumeTrackLocation()
         {
@@ -83,6 +84,7 @@ namespace TourGuideTest
             Assert.True(TimeSpan.FromMinutes(15).TotalSeconds >= stopWatch.Elapsed.TotalSeconds);
         }
 
+        
         [Fact]
         public async Task HighVolumeGetRewards()
         {
