@@ -35,24 +35,45 @@ public class RewardsService : IRewardsService
     public void CalculateRewards(User user)
     {
         count++;
-        List<VisitedLocation> userLocations = user.VisitedLocations;
-        List<Attraction> attractions = _gpsUtil.GetAttractions();
+
+        // Snapshot complet des collections
+        var userLocations = user.VisitedLocations.ToArray();
+        var attractions = _gpsUtil.GetAttractions().ToArray();
 
         foreach (var visitedLocation in userLocations)
         {
             foreach (var attraction in attractions)
             {
-                if (!user.UserRewards.Any(r => r.Attraction.AttractionName == attraction.AttractionName))
+                // On check les rewards dans un lock
+                bool alreadyRewarded;
+
+                lock (user)
                 {
-                    if (NearAttraction(visitedLocation, attraction))
+                    alreadyRewarded = user.UserRewards
+                        .Any(r => r.Attraction.AttractionId == attraction.AttractionId);
+                }
+
+                if (alreadyRewarded)
+                    continue;
+
+                if (NearAttraction(visitedLocation, attraction))
+                {
+                    var rewardPoints = GetRewardPoints(attraction, user);
+
+                    lock (user)
                     {
-                        user.AddUserReward(new UserReward(visitedLocation, attraction, GetRewardPoints(attraction, user)));
+                        if (!user.UserRewards
+                            .Any(r => r.Attraction.AttractionId == attraction.AttractionId))
+                        {
+                            user.AddUserReward(
+                                new UserReward(visitedLocation, attraction, rewardPoints)
+                            );
+                        }
                     }
                 }
             }
         }
     }
-
     public bool IsWithinAttractionProximity(Attraction attraction, Locations location)
     {
         Console.WriteLine(GetDistance(attraction, location));
