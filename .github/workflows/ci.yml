@@ -26,13 +26,18 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run Tests (without performance)
-        run: dotnet test --configuration Release --no-build --filter Category!=Performance
+        run: dotnet test --configuration Release --no-build --filter "Category!=Performance"
 
       - name: Publish API
         run: dotnet publish Api/TourGuide.csproj -c Release -o publish
 
-      - name: Upload Artifact
+      - name: Create ZIP artifact
+        run: |
+          cd publish
+          zip -r ../tourguide-api.zip .
+
+      - name: Upload ZIP Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tourguide-api
-          path: publish
+          name: tourguide-api-zip
+          path: tourguide-api.zip
