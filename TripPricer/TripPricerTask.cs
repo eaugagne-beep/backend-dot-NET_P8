@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace TripPricer;
 
+
+// Classe de tâche pour récupérer les prix des fournisseurs de voyages
 public class TripPricerTask : Task<List<Provider>>
 {
     private readonly Guid _attractionId;

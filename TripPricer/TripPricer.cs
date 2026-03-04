@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using TripPricer.Helpers;
 
 namespace TripPricer;
 
 public class TripPricer
 {
+
+    // Simuler la récupération des prix auprès de différents fournisseurs
     public List<Provider> GetPrice(string apiKey, Guid attractionId, int adults, int children, int nightsStay, int rewardsPoints)
     {
         List<Provider> providers = new List<Provider>();
         HashSet<string> providersUsed = new HashSet<string>();
 
-        // Sleep to simulate some latency
+        
         Thread.Sleep(ThreadLocalRandom.Current.Next(1, 50));
 
+        // Simuler le calcul du prix et la sélection du fournisseur
         for (int i = 0; i < 10; i++)
         {
             int multiple = ThreadLocalRandom.Current.Next(100, 700);
@@ -40,6 +39,7 @@ public class TripPricer
         return providers;
     }
 
+    // Simuler la sélection d'un fournisseur en fonction de l'apiKey et du nombre d'adultes
     public string GetProviderName(string apiKey, int adults)
     {
         int multiple = ThreadLocalRandom.Current.Next(1, 11);

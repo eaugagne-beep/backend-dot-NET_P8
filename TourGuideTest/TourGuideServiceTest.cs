@@ -1,16 +1,11 @@
 ﻿using GpsUtil.Location;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TourGuide.Services;
 using TourGuide.Users;
-using TourGuide.Utilities;
 using TripPricer;
 
 namespace TourGuideTest
 {
+
+    // Classe de test pour le service TourGuideService
     public class TourGuideServiceTour : IClassFixture<DependencyFixture>
     {
         private readonly DependencyFixture _fixture;
@@ -25,6 +20,8 @@ namespace TourGuideTest
             _fixture.Cleanup();
         }
 
+
+        // Test pour vérifier que la localisation d'un utilisateur est correctement suivie
         [Fact]
         public void GetUserLocation()
         {
@@ -36,6 +33,8 @@ namespace TourGuideTest
             Assert.Equal(user.UserId, visitedLocation.UserId);
         }
 
+
+        // Test pour vérifier que les utilisateurs peuvent être ajoutés et récupérés correctement
         [Fact]
         public void AddUser()
         {
@@ -55,6 +54,8 @@ namespace TourGuideTest
             Assert.Equal(user2, retrievedUser2);
         }
 
+
+        // Test pour vérifier que tous les utilisateurs peuvent être récupérés correctement
         [Fact]
         public void GetAllUsers()
         {
@@ -73,6 +74,8 @@ namespace TourGuideTest
             Assert.Contains(user2, allUsers);
         }
 
+
+        // Test pour vérifier que la localisation d'un utilisateur est correctement suivie et associée à l'utilisateur
         [Fact]
         public void TrackUser()
         {
@@ -85,6 +88,8 @@ namespace TourGuideTest
             Assert.Equal(user.UserId, visitedLocation.UserId);
         }
 
+
+        // Test pour vérifier que les attractions à proximité sont correctement récupérées en fonction de la localisation d'un utilisateur
         [Fact]
         public void GetNearbyAttractions()
         {
@@ -99,6 +104,8 @@ namespace TourGuideTest
             Assert.Equal(5, attractions.Count);
         }
 
+
+        // Test pour vérifier que les offres de voyage sont correctement récupérées pour un utilisateur
         [Fact]
         public void GetTripDeals()
         {

@@ -36,7 +36,7 @@ public class RewardsService : IRewardsService
     {
         count++;
 
-        // Snapshot complet des collections
+        
         var userLocations = user.VisitedLocations.ToArray();
         var attractions = _gpsUtil.GetAttractions().ToArray();
 
@@ -44,7 +44,7 @@ public class RewardsService : IRewardsService
         {
             foreach (var attraction in attractions)
             {
-                // On check les rewards dans un lock
+                
                 bool alreadyRewarded;
 
                 lock (user)

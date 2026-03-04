@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using TourGuide.LibrairiesWrappers.Interfaces;
 using TourGuide.Services.Interfaces;
 using TourGuide.Services;
@@ -12,6 +8,7 @@ using TourGuide.Utilities;
 
 namespace TourGuideTest
 {
+    // Classe de fixture pour configurer les dépendances nécessaires aux tests
     public class DependencyFixture
     {
         public DependencyFixture()
@@ -24,6 +21,7 @@ namespace TourGuideTest
             Initialize();
         }
 
+        // Méthode d'initialisation pour configurer les dépendances nécessaires aux tests
         public void Initialize(int internalUserNumber = 100)
         {
             var loggerFactory = LoggerFactory.Create(builder =>

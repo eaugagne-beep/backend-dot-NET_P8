@@ -1,38 +1,15 @@
 ﻿using GpsUtil.Location;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TourGuide.LibrairiesWrappers.Interfaces;
-using TourGuide.Services.Interfaces;
 using TourGuide.Users;
-using TourGuide.Utilities;
 using Xunit.Abstractions;
 
 namespace TourGuideTest
 {
+
+    // Classe de test pour vérifier les performances du service TourGuideService et RewardsService avec un grand nombre d'utilisateurs
     public class PerformanceTest : IClassFixture<DependencyFixture>
     {
-        /*
-         * Note on performance improvements:
-         * 
-         * The number of generated users for high-volume tests can be easily adjusted using this method:
-         * 
-         *_fixture.Initialize(100000); (for example)
-         * 
-         * 
-         * These tests can be modified to fit new solutions, as long as the performance metrics at the end of the tests remain consistent.
-         * 
-         * These are the performance metrics we aim to achieve:
-         * 
-         * highVolumeTrackLocation: 100,000 users within 15 minutes:
-         * Assert.True(TimeSpan.FromMinutes(15).TotalSeconds >= stopWatch.Elapsed.TotalSeconds);
-         *
-         * highVolumeGetRewards: 100,000 users within 20 minutes:
-         * Assert.True(TimeSpan.FromMinutes(20).TotalSeconds >= stopWatch.Elapsed.TotalSeconds);
-        */
+      
 
         private readonly DependencyFixture _fixture;
 
@@ -44,12 +21,12 @@ namespace TourGuideTest
             _output = output;
         }
 
-
+        // Test pour vérifier que la méthode de suivi de localisation fonctionne correctement même avec un grand nombre d'utilisateurs
         [Trait("Category", "Performance")]
         [Fact]
         public async Task HighVolumeTrackLocation()
         {
-            _fixture.Initialize(100000); // puis 10_000, puis 100_000
+            _fixture.Initialize(100000);
 
             List<User> allUsers = _fixture.TourGuideService.GetAllUsers();
             Console.WriteLine($"Users: {allUsers.Count}");
@@ -65,7 +42,7 @@ namespace TourGuideTest
                 await sem.WaitAsync();
                 try
                 {
-                    // Appel sync encapsulé dans une tâche
+                    
                     await Task.Run(() => _fixture.TourGuideService.TrackUserLocation(user));
                 }
                 finally
@@ -85,11 +62,12 @@ namespace TourGuideTest
             Assert.True(TimeSpan.FromMinutes(15).TotalSeconds >= stopWatch.Elapsed.TotalSeconds);
         }
 
+        // Test pour vérifier que la méthode de calcul des récompenses fonctionne correctement même avec un grand nombre d'utilisateurs
         [Trait("Category", "Performance")]
         [Fact]
         public async Task HighVolumeGetRewards()
         {
-            _fixture.Initialize(100000); // puis 10_000, puis 100_000
+            _fixture.Initialize(100000);
 
             var stopWatch = Stopwatch.StartNew();
 

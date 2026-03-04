@@ -4,7 +4,7 @@ using TourGuide.Services.Interfaces;
 using TourGuide.Users;
 using TripPricer;
 using TourGuide.Models;
-using GpsUtil.Location;
+
 
 namespace TourGuide.Controllers;
 
@@ -18,7 +18,8 @@ public class TourGuideController : ControllerBase
     {
         _tourGuideService = tourGuideService;
     }
-
+   
+    // Endpoint pour récupérer la localisation actuelle de l'utilisateur
     [HttpGet("getLocation")]
     public ActionResult<VisitedLocation> GetLocation([FromQuery] string userName)
     {
@@ -26,15 +27,7 @@ public class TourGuideController : ControllerBase
         return Ok(location);
     }
 
-    // TODO: Change this method to no longer return a List of Attractions.
-    // Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
-    // Return a new JSON object that contains:
-    // Name of Tourist attraction, 
-    // Tourist attractions lat/long, 
-    // The user's location lat/long, 
-    // The distance in miles between the user's location and each of the attractions.
-    // The reward points for visiting each Attraction.
-    //    Note: Attraction reward points can be gathered from RewardsCentral
+    // Endpoint pour récupérer les attractions à proximité de l'utilisateur
     [HttpGet("getNearbyAttractions")]
     public ActionResult<List<NearbyAttractionDto>> GetNearbyAttractions([FromQuery] string userName)
     {
@@ -46,6 +39,7 @@ public class TourGuideController : ControllerBase
         {
             var attractionLocation = new Locations(a.Latitude, a.Longitude);
 
+            // Calculer la distance entre l'utilisateur et l'attraction, ainsi que les points de récompense
             return new NearbyAttractionDto
             {
                 AttractionName = a.AttractionName,
@@ -68,13 +62,15 @@ public class TourGuideController : ControllerBase
         return Ok(result);
     }
 
+    // Endpoint pour récupérer les récompenses de l'utilisateur
     [HttpGet("getRewards")]
     public ActionResult<List<UserReward>> GetRewards([FromQuery] string userName)
     {
         var rewards = _tourGuideService.GetUserRewards(GetUser(userName));
         return Ok(rewards);
     }
-
+   
+    // Endpoint pour récupérer les offres de voyage pour l'utilisateur
     [HttpGet("getTripDeals")]
     public ActionResult<List<Provider>> GetTripDeals([FromQuery] string userName)
     {

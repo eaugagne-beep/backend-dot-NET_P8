@@ -1,14 +1,10 @@
 ﻿using GpsUtil.Location;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourGuide.Users;
-using TourGuide.Utilities;
+
 
 namespace TourGuideTest;
 
+// Classe de test pour le service RewardsService
 public class RewardServiceTest : IClassFixture<DependencyFixture>
 {
     private readonly DependencyFixture _fixture;
@@ -18,6 +14,7 @@ public class RewardServiceTest : IClassFixture<DependencyFixture>
         _fixture = fixture;
     }
 
+    // Test pour vérifier que les récompenses sont attribuées correctement lorsqu'un utilisateur visite une attraction
     [Fact]
     public void UserGetRewards()
     {
@@ -31,6 +28,7 @@ public class RewardServiceTest : IClassFixture<DependencyFixture>
         Assert.True(userRewards.Count == 1);
     }
 
+    // Test pour vérifier que la méthode IsWithinAttractionProximity fonctionne correctement
     [Fact]
     public void IsWithinAttractionProximity()
     {
@@ -38,6 +36,8 @@ public class RewardServiceTest : IClassFixture<DependencyFixture>
         Assert.True(_fixture.RewardsService.IsWithinAttractionProximity(attraction, attraction));
     }
 
+
+    // Test pour vérifier que les récompenses sont attribuées pour toutes les attractions à proximité
     [Fact]
     public void NearAllAttractions()
     {
